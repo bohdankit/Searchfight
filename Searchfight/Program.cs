@@ -12,9 +12,9 @@ namespace Searchfight
         static async Task Main(string[] queries)
         {
             var serviceProvider = new ServiceCollection()
-                .AddSingleton<IWebRequestHandler, WebRequestHandler>()
-                .AddSingleton<IConsoleHandler, ConsoleHandler>()
-                .BuildServiceProvider();
+                 .AddSingleton<IWebRequestHandler, WebRequestHandler>()
+                 .AddSingleton<IConsoleHandler, ConsoleHandler>()
+                 .BuildServiceProvider();
 
             var webRequestHandler =
                 serviceProvider.GetService<IWebRequestHandler>();
