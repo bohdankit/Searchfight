@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
@@ -53,9 +51,9 @@ namespace Searchfight.Tests.Services
             var queries = new[]{one, two};
 
             var a1 = new SearchResult(SearchEngineName.Google, 1);
-            var b1 = new SearchResult(SearchEngineName.Bing, 2);
+            var b1 = new SearchResult(SearchEngineName.Bing, 3);
             var a2 = new SearchResult(SearchEngineName.Google, 4);
-            var b2 = new SearchResult(SearchEngineName.Bing, 3);
+            var b2 = new SearchResult(SearchEngineName.Bing, 2);
 
             _engineMockA.Setup(x => x.GetResultsCountAsync(one))
                 .ReturnsAsync(a1);

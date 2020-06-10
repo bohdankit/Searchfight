@@ -25,7 +25,7 @@ namespace Searchfight.Services
             _competitionResults = new List<CompetitionResult>();
             foreach (var engine in _engines)
             {
-                _competitionResults.Add(new CompetitionResult(engine.GetName(), new List<string>()));
+                _competitionResults.Add(new CompetitionResult(engine.GetName()));
             }
         }
 
@@ -42,15 +42,26 @@ namespace Searchfight.Services
                 var fightResult = await finishedSearch;
                 _consoleHandler.WriteLine(fightResult.ToString());
 
+                foreach (var result in _competitionResults)
+                {
+                    var searchResultForEngine = fightResult.SearchResults
+                        .First(x => x.EngineName == result.EngineName);
+                    if (searchResultForEngine.Count > result.Count)
+                    {
+                        result.SetCountAndQuery(
+                            searchResultForEngine.Count,
+                            fightResult.RequestQuery);
+                    }
+                }
+
                 var fightWinnerResult = fightResult.SearchResults
                     .OrderByDescending(item => item.Count).First();
                 if (fightWinnerResult.Count > totalWinnerCount)
                 {
                     _totalWinner = fightResult.RequestQuery;
+                    totalWinnerCount = fightWinnerResult.Count;
                 }
-                var winnerEngine = _competitionResults.First(x => x.EngineName == fightWinnerResult.EngineName);
-                winnerEngine.Queries.Add(fightResult.RequestQuery);
-
+                
                 searchTasks.Remove(finishedSearch);
             }
 
@@ -89,8 +100,7 @@ namespace Searchfight.Services
         {
             foreach (var result in _competitionResults)
             {
-                _consoleHandler.WriteLine($"{result.EngineName.ToString()} winner: "
-                                  + string.Join(' ', result.Queries));
+                _consoleHandler.WriteLine(result.ToString());
             }
             _consoleHandler.WriteLine($"Total winner: {_totalWinner}");
         }
